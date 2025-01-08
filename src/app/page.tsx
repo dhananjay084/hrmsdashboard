@@ -1,14 +1,13 @@
 "use client";
-import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
-import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
-import SickSharpIcon from '@mui/icons-material/SickSharp';
-import DirectionsWalkSharpIcon from '@mui/icons-material/DirectionsWalkSharp';
-import { Button } from '@mui/material';
+import { MdLogout } from "react-icons/md";
+import { MdAddHomeWork } from "react-icons/md";
+import { MdSick } from "react-icons/md";
+import { MdBreakfastDining } from "react-icons/md";
 import ClientCalendar from '@/components/Calendar';
 import { useEffect, useState } from 'react';
 import ProgressBar from '@/components/Progress';
-import StarsIcon from '@mui/icons-material/Stars';
-import CakeIcon from '@mui/icons-material/Cake';
+import { GrAnnounce } from "react-icons/gr";
+import { FaBirthdayCake } from "react-icons/fa";
 import LeaveFormModal from "@/components/modal/addLeave";
 import Punch from "@/components/punchInOut"
 import nookies from "nookies";
@@ -324,9 +323,9 @@ const Dashboard = () => {
 
                         </span>
                         <span className='flex flex-col items-center gap-2'>
-                            <DirectionsWalkSharpIcon sx={{ width: 50, height: 50 }} />
-                            <Button variant="contained" onClick={() => setIsLeaveFormOpen(true)}
-                            >Apply CL</Button>
+                            <MdBreakfastDining className="w-[50px] h-[50px]"  />
+                            <button className="bg-[#3788D8] px-2 py-1 rounded-lg text-white"  onClick={() => setIsLeaveFormOpen(true)}
+                            >Apply CL</button>
                         </span>
                     </div>
                     <div className=" rounded-mid shadow-md p-4 w-1/4 bg-white flex justify-between items-center" >
@@ -339,9 +338,9 @@ const Dashboard = () => {
 
                         </span>
                         <span className='flex flex-col items-center gap-2'>
-                            <LogoutSharpIcon sx={{ width: 50, height: 50 }} />
-                            <Button variant="contained" onClick={() => setIsLeaveFormOpen(true)}
-                            >Apply PL</Button>
+                            <MdLogout className="w-[50px] h-[50px]" />
+                            <button className="bg-[#3788D8] px-2 py-1 rounded-lg text-white" onClick={() => setIsLeaveFormOpen(true)}
+                            >Apply PL</button>
 
                         </span>
                     </div>
@@ -355,9 +354,9 @@ const Dashboard = () => {
 
                         </span>
                         <span className='flex flex-col items-center gap-2'>
-                            <SickSharpIcon sx={{ width: 50, height: 50 }} />
-                            <Button variant="contained" onClick={() => setIsLeaveFormOpen(true)}
-                            >Apply SL</Button>
+                            <MdSick className="h-[50px] w-[50px]"  />
+                            <button className="bg-[#3788D8] px-2 py-1 rounded-lg text-white" onClick={() => setIsLeaveFormOpen(true)}
+                            >Apply SL</button>
 
                         </span>
                     </div>
@@ -368,9 +367,9 @@ const Dashboard = () => {
 
                         </span>
                         <span className='flex flex-col items-center gap-2'>
-                            <AddHomeWorkIcon sx={{ width: 50, height: 50 }} />
-                            <Button variant="contained" onClick={() => setIsLeaveFormOpen(true)}
-                            >Apply WFH</Button>
+                            <MdAddHomeWork className="h-[50px] w-[50px]"  />
+                            <button className="bg-[#3788D8] px-2 py-1 rounded-lg text-white" onClick={() => setIsLeaveFormOpen(true)}
+                            >Apply WFH</button>
 
                         </span>
                     </div>
@@ -407,7 +406,7 @@ const Dashboard = () => {
                                             <button
                                                 onClick={() => updateLeaveStatus(leave._id, 'Approved')}
                                                 style={{ cursor: 'pointer' }}
-                                                className='rounded-lg p-1 border border-[#d5d5d5] rounded-full'>
+                                                className="bg-[#3788D8] px-2 py-1 rounded-lg text-white">
                                                 Approve
                                             </button>
 }
@@ -429,7 +428,7 @@ const Dashboard = () => {
                                 <li key={announcement._id} className="mt-2">
                                     <div className="flex justify-between items-center border border-[#d3d3d3] p-2 rounded-mid">
                                         <span className="flex items-start items-center gap-2">
-                                            <StarsIcon />
+                                            <GrAnnounce />
                                             <span className="text-left">
                                                 <p className="text-sm">{announcement.announcement}</p>
                                             </span>
@@ -439,7 +438,7 @@ const Dashboard = () => {
                             ))}
                         </ul>
                         </div>
-                        <h2 className='text-lg mt-4'><b>Events</b></h2>
+                        <h2 className='text-lg mt-4'><b>Birth Days</b></h2>
 
                         <div className='mt-2 max-h-[300px]  overflow-y-scroll' style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
 
@@ -451,7 +450,7 @@ const Dashboard = () => {
                                         <li key={user._id} className='mt-2'>
                                             <div className='flex justify-between items-center border border-[#d3d3d3] p-2 rounded-mid'>
                                                 <span className='flex items-start items-center gap-2'>
-                                                    <CakeIcon />
+                                                    <FaBirthdayCake />
                                                     <span className='text-left'>
                                                         <p className='text-sm'>{user.firstName} {user.lastName}</p>
                                                         <p className='text-sm'>{new Date(user.dob).toLocaleDateString()}</p>

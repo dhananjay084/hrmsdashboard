@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import nookies from "nookies";
-import { Button, TextField } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -101,6 +100,7 @@ const PunchInOut = () => {
 
     // Haversine formula to calculate the distance between two coordinates
     const haversineDistance = (lat1, lon1, lat2, lon2) => {
+        console.log(lat1, lon1, lat2, lon2)
         const R = 6371; // Earth radius in km
         const dLat = (lat2 - lat1) * (Math.PI / 180);
         const dLon = (lon2 - lon1) * (Math.PI / 180);
@@ -204,9 +204,9 @@ const PunchInOut = () => {
                 <h1 className="text-lg font-semibold mb-4">Punch In / Punch Out</h1>
 
                 <div className="flex items-center justify-center p-6 pt-0 mx-auto gap-2">
-                    <Button variant="contained" onClick={getLocation}>Get Location</Button>
-                    <Button variant="contained" onClick={punchIn} disabled={isPunchInDisabled}>Punch In</Button>
-                    <Button variant="contained" onClick={punchOut}>Punch Out</Button>
+                    <button   className="bg-[#3788D8] px-2 py-1 rounded-lg text-white" onClick={getLocation}>Get Location</button>
+                    <button   className="bg-[#3788D8] px-2 py-1 rounded-lg text-white"  onClick={punchIn} disabled={isPunchInDisabled}>Punch In</button>
+                    <button   className="bg-[#3788D8] px-2 py-1 rounded-lg text-white"  onClick={punchOut}>Punch Out</button>
                 </div>
             </div>
 
@@ -235,22 +235,18 @@ const PunchInOut = () => {
 
 
 <div className='w-full bg-white shadow-lg rounded-lg p-4 text-center mb-4 mx-auto'>
-    <TextField
+<div className="flex flex-col items-start mt-4">
+      <label htmlFor="date" className="text-gray-700 mb-2">
+        Select Date
+      </label>
+      <input
         type="date"
+        id="date"
         value={selectedDate}
         onChange={handleDateChange}
-        label="Select Date"
-        variant="outlined"
-        className="mt-4"
-        InputLabelProps={{
-            shrink: true,  // Ensures the label doesn't overlap the input field
-        }}
-        InputProps={{
-            inputProps: {
-                placeholder: '',  // Remove the placeholder
-            }
-        }}
-    />
+        className="p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      />
+    </div>
     {selectedDate && (
        <>
             <h2 className="text-lg font-semibold mb-4 text-start mt-2">Punch for {selectedDate}</h2>
