@@ -228,6 +228,7 @@ const Employee = ({ params }) => {
                 <div className="flex items-center gap-4 w-fit">
                     <Image src={UserIcon} alt="user" className="max-w-[200px]" />
                     <span>
+                        <p className="my-2"><b>Emp Code:</b> {userDetails ? userDetails.empCode : slug} </p>
                         <p className="my-2"><b>Name:</b> {userDetails ? userDetails.firstName : slug} {userDetails ? userDetails.lastName : slug}</p>
                         <p className="my-2"><b>Designation:</b> {userDetails ? userDetails.designation : 'Test'}</p>
                         <p className="my-2"><b>Salary:</b> {userDetails ? userDetails.salary : 'Test'}</p>
@@ -270,7 +271,7 @@ const Employee = ({ params }) => {
                                         <option value="">Select a user</option>
                                         {users.map(user => (
                                             <option key={user._id} value={user._id}>
-                                                {user.firstName} {user.lastName}
+                                                {` ${user.firstName} ${user.lastName} (${user.empCode})`}
                                             </option>
                                         ))}
                                     </select>
@@ -308,7 +309,8 @@ const Employee = ({ params }) => {
                                         <option value="">Select a user</option>
                                         {users.map(user => (
                                             <option key={user._id} value={user._id}>
-                                                {user.firstName} {user.lastName}
+                                                {` ${user.firstName} ${user.lastName} (${user.empCode})`}
+
                                             </option>
                                         ))}
                                     </select>
@@ -376,7 +378,7 @@ const Employee = ({ params }) => {
                             <li key={task._id} className="flex justify-between items-center border p-2 my-2">
                                 <span>{task.task}</span>
                                 {
-                                    role ==='Admin' &&
+                                    role === 'Admin' &&
                                     <button
                                         onClick={() => handleDeleteTask(task._id)}
                                         className="text-red-500"

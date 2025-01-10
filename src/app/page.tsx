@@ -11,6 +11,7 @@ import { FaBirthdayCake } from "react-icons/fa";
 import LeaveFormModal from "@/components/modal/addLeave";
 import Punch from "@/components/punchInOut"
 import nookies from "nookies";
+import { FaCheck } from "react-icons/fa6";
 
 import { toast } from 'react-toastify';
 
@@ -407,7 +408,7 @@ const Dashboard = () => {
                                                 onClick={() => updateLeaveStatus(leave._id, 'Approved')}
                                                 style={{ cursor: 'pointer' }}
                                                 className="bg-[#3788D8] px-2 py-1 rounded-lg text-white">
-                                                Approve
+                                               <FaCheck />
                                             </button>
 }
                                         </span>

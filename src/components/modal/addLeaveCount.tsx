@@ -6,6 +6,7 @@ interface User {
     _id: string;
     firstName: string;
     lastName: string;
+    empCode:string
 }
 
 interface LeaveAdjustmentModalProps {
@@ -25,6 +26,7 @@ const LeaveAdjustmentModal: React.FC<LeaveAdjustmentModalProps> = ({ closeModal 
         adjustment: '',
     });
     const [users, setUsers] = useState<User[]>([]);
+    const [loading, setLoading] = useState<boolean>(false); // Loading state to manage button status
     const leaveTypes = ['Sick', 'Planned', 'WFH', 'Casual'];
 
     // Fetch users on component mount
@@ -33,6 +35,7 @@ const LeaveAdjustmentModal: React.FC<LeaveAdjustmentModalProps> = ({ closeModal 
             try {
                 const response = await fetch('https://hrmsnode.onrender.com/api/users');
                 const data: User[] = await response.json();
+                console.log(data)
                 setUsers(data);
             } catch (error) {
                 console.error('Error fetching users:', error);
@@ -52,6 +55,9 @@ const LeaveAdjustmentModal: React.FC<LeaveAdjustmentModalProps> = ({ closeModal 
     // Handle form submission
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
+        // Start loading when form is submitted
+        setLoading(true);
 
         // Ensure adjustment is a number
         const adjustedFormData = {
@@ -81,6 +87,8 @@ const LeaveAdjustmentModal: React.FC<LeaveAdjustmentModalProps> = ({ closeModal 
         } catch (error) {
             console.error('Error adjusting leave balance:', error);
             toast.error('Error adjusting leave balance');
+        } finally {
+            setLoading(false); // Reset loading state after request completes
         }
     };
 
@@ -107,7 +115,7 @@ const LeaveAdjustmentModal: React.FC<LeaveAdjustmentModalProps> = ({ closeModal 
                             </option>
                             {users.map((user) => (
                                 <option key={user._id} value={user._id}>
-                                    {user.firstName} {user.lastName}
+                                 {  `${user.firstName} ${user.lastName} (${user.empCode})` }
                                 </option>
                             ))}
                         </select>
@@ -163,8 +171,9 @@ const LeaveAdjustmentModal: React.FC<LeaveAdjustmentModalProps> = ({ closeModal 
                         <button
                             type="submit"
                             className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+                            disabled={loading} // Disable the submit button when loading
                         >
-                            Submit
+                            {loading ? 'Submitting...' : 'Submit'} {/* Button text changes when loading */}
                         </button>
                     </div>
                 </form>

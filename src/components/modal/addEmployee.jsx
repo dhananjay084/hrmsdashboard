@@ -266,6 +266,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onEmployeeAdded }) {
                   type="submit"
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                
                 >
                   {isSubmitting ? 'Adding...' : 'Add Employee'}
                 </button>

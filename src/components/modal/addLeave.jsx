@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css'; // Import the styles for the toa
 const LeaveFormModal = ({ isOpen, close }) => {
   const cookies = nookies.get();
   const userId = cookies.id;
+
   const [formData, setFormData] = useState({
     userId: userId,
     startDate: '',
@@ -14,15 +15,24 @@ const LeaveFormModal = ({ isOpen, close }) => {
     reason: '',
     leaveType: '', // Add leaveType in form data
   });
+  const [loading, setLoading] = useState(false); // State to manage loading
 
+  // Handle form input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Start loading when form is submitted
+    setLoading(true); // Set loading to true as soon as the submit starts
+
     try {
       const response = await axios.post('https://hrmsnode.onrender.com/api/leaves', formData);
+      
+      // Show success toast
       toast.success('Leave request created successfully!', {
         onClose: () => {
           setTimeout(() => {
@@ -32,8 +42,11 @@ const LeaveFormModal = ({ isOpen, close }) => {
       });
       console.log(response.data);
     } catch (error) {
+      // Show error toast
       toast.error('Error creating leave request!');
       console.error(error);
+    } finally {
+      setLoading(false); // Reset loading state after request completes
     }
   };
 
@@ -120,8 +133,9 @@ const LeaveFormModal = ({ isOpen, close }) => {
                 <button
                   type="submit"
                   className="bg-blue-500 text-white p-2 rounded"
+                  disabled={loading} // Disable the submit button when loading
                 >
-                  Submit
+                  {loading ? 'Submitting...' : 'Submit'} {/* Change text to 'Submitting...' while loading */}
                 </button>
               </div>
             </form>

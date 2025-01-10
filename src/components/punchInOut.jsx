@@ -6,8 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // Office Coordinates
 const officeCoordinates = {
-    latitude: 28.4688384,
-    longitude: 77.0310144,
+    
+    latitude:  28.444781580071357,longitude: 77.0597615823928
 };
 
 const PunchInOut = () => {
