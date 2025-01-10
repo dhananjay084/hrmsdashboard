@@ -228,7 +228,7 @@ const Employee = ({ params }) => {
                 <div className="flex items-center gap-4 w-fit">
                     <Image src={UserIcon} alt="user" className="max-w-[200px]" />
                     <span>
-                        <p className="my-2"><b>Emp Code:</b> {userDetails ? userDetails.empCode : slug} </p>
+                        <p className="my-2"><b>Employee Code:</b> {userDetails ? userDetails.empCode : slug} </p>
                         <p className="my-2"><b>Name:</b> {userDetails ? userDetails.firstName : slug} {userDetails ? userDetails.lastName : slug}</p>
                         <p className="my-2"><b>Designation:</b> {userDetails ? userDetails.designation : 'Test'}</p>
                         <p className="my-2"><b>Salary:</b> {userDetails ? userDetails.salary : 'Test'}</p>
