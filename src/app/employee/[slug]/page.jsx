@@ -14,14 +14,14 @@ const Employee = ({ params }) => {
     const { slug } = params;
 
     const [userDetails, setUserDetails] = useState(null);
-    const [error] = useState(null);
+    // const [error] = useState(null);
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState("");
     const [file, setFile] = useState(null);
-    const [success] = useState("");
+    // const [success] = useState("");
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState("");
-    const [documents, setDocuments] = useState([]);
+    // const [documents, setDocuments] = useState([]);
     const [newAnnouncement, setNewAnnouncement] = useState("");
 
     const cookies = nookies.get();
@@ -76,53 +76,53 @@ const Employee = ({ params }) => {
             }
         };
 
-        const fetchDocuments = async () => {
-            try {
-                const res = await fetch(`https://hrmsnode.onrender.com/api/documents/${slug}`);
-                const data = await res.json();
-                console.log("documents", data);
-                setDocuments(data);
-            } catch (err) {
-                console.log(err);
-                toast.error("Error fetching documents");
-            }
-        };
+        // const fetchDocuments = async () => {
+        //     try {
+        //         const res = await fetch(`https://hrmsnode.onrender.com/api/documents/${slug}`);
+        //         const data = await res.json();
+        //         console.log("documents", data);
+        //         setDocuments(data);
+        //     } catch (err) {
+        //         console.log(err);
+        //         toast.error("Error fetching documents");
+        //     }
+        // };
 
-        fetchDocuments();
+        // fetchDocuments();
         fetchTasks();
     }, [slug]);
 
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
 
-        if (!file || !selectedUser) {
-            toast.error('Please select a user and upload a file');
-            return;
-        }
+    //     if (!file || !selectedUser) {
+    //         toast.error('Please select a user and upload a file');
+    //         return;
+    //     }
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('userId', selectedUser);
+    //     const formData = new FormData();
+    //     formData.append('file', file);
+    //     formData.append('userId', selectedUser);
 
-        try {
-            const res = await fetch('https://hrmsnode.onrender.com/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
+    //     try {
+    //         const res = await fetch('https://hrmsnode.onrender.com/api/upload', {
+    //             method: 'POST',
+    //             body: formData,
+    //         });
 
-            if (res.ok) {
-                toast.success('File uploaded successfully');
-                setFile(null);
-                setSelectedUser('');
-            } else {
-                toast.error('Failed to upload file');
-            }
-        } catch (err) {
-            console.log(err)
-            toast.error('An error occurred during the upload');
-        }
-    };
+    //         if (res.ok) {
+    //             toast.success('File uploaded successfully');
+    //             setFile(null);
+    //             setSelectedUser('');
+    //         } else {
+    //             toast.error('Failed to upload file');
+    //         }
+    //     } catch (err) {
+    //         console.log(err)
+    //         toast.error('An error occurred during the upload');
+    //     }
+    // };
 
     const handleAddTask = async (e) => {
         e.preventDefault();
@@ -182,10 +182,10 @@ const Employee = ({ params }) => {
         return new Intl.DateTimeFormat('en-GB', options).format(date);
     };
 
-    const handleDownload = (fileName) => {
-        const downloadUrl = `https://hrmsnode.onrender.com/download/${fileName}`;
-        window.location.href = downloadUrl;
-    };
+    // const handleDownload = (fileName) => {
+    //     const downloadUrl = `https://hrmsnode.onrender.com/download/${fileName}`;
+    //     window.location.href = downloadUrl;
+    // };
 
     const handleAddAnnouncement = async (e) => {
         e.preventDefault();
