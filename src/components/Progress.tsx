@@ -16,11 +16,11 @@ const LeaveProgress = () => {
     "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
   ];
   const cookies = nookies.get(); // Get all cookies
-  var userIdFromCookies = cookies.id;
+  var id = cookies.id;
 // Fetch Casual Leave Data
 const FetchCasual = async () => {
   try {
-    const response = await fetch(`https://hrmsnode.onrender.com/api/leaves/${userIdFromCookies}?month=${month}&year=${year}&leaveType=Casual`);
+    const response = await fetch(`https://hrmsnode.onrender.com/api/leaves/${id}?month=${month}&year=${year}&leaveType=Casual`);
     console.table([userId,response])
     if (!response.ok) throw new Error('Error fetching Casual leave');
     const data = await response.json();
@@ -41,7 +41,7 @@ const FetchCasual = async () => {
 // Fetch Planned Leave Data
 const FetchPlanned = async () => {
   try {
-    const response = await fetch(`https://hrmsnode.onrender.com/api/leaves/${userIdFromCookies}?month=${month}&year=${year}&leaveType=Planned`);
+    const response = await fetch(`https://hrmsnode.onrender.com/api/leaves/${id}?month=${month}&year=${year}&leaveType=Planned`);
     if (!response.ok) throw new Error('Error fetching Planned leave');
     const data = await response.json();
     
@@ -61,7 +61,7 @@ const FetchPlanned = async () => {
 // Fetch Sick Leave Data
 const FetchSick = async () => {
   try {
-    const response = await fetch(`https://hrmsnode.onrender.com/api/leaves/${userIdFromCookies}?month=${month}&year=${year}&leaveType=Sick`);
+    const response = await fetch(`https://hrmsnode.onrender.com/api/leaves/${id}?month=${month}&year=${year}&leaveType=Sick`);
     if (!response.ok) throw new Error('Error fetching Sick leave');
     const data = await response.json();
     
@@ -81,7 +81,7 @@ const FetchSick = async () => {
 // Fetch WFH Data (assuming this exists in your API)
 const FetchWFH = async () => {
   try {
-    const response = await fetch(`https://hrmsnode.onrender.com/api/leaves/${userIdFromCookies}?month=${month}&year=${year}&leaveType=WFH`);
+    const response = await fetch(`https://hrmsnode.onrender.com/api/leaves/${id}?month=${month}&year=${year}&leaveType=WFH`);
     if (!response.ok) throw new Error('Error fetching WFH data');
     const data = await response.json();
     
@@ -102,7 +102,7 @@ const FetchWFH = async () => {
   // Fetch leave balances (like remaining leave, etc.)
   const FetchLeaveData = async () => {
     try {
-      const response = await fetch(`https://hrmsnode.onrender.com/api/leavecount/getbalance/${userIdFromCookies}`);
+      const response = await fetch(`https://hrmsnode.onrender.com/api/leavecount/getbalance/${id}`);
       if (!response.ok) throw new Error('Error fetching leave balance data');
       const data = await response.json();
       setLeaveData(data.leaveBalances);
