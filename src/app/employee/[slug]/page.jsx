@@ -295,7 +295,7 @@ const Employee = ({ params }) => {
                     </div>
 
                     <div className='flex justify-between mt-4 gap-4'>
-                        <div className="text-center border border-[#d3d3d3] p-4 rounded-md w-1/2">
+                        {/* <div className="text-center border border-[#d3d3d3] p-4 rounded-md w-1/2">
                             <b>Upload Documents</b>
                             <form className="flex flex-col items-center space-y-6 my-6" onSubmit={handleSubmit}>
                                 <div>
@@ -341,8 +341,8 @@ const Employee = ({ params }) => {
                                     Upload
                                 </button>
                             </form>
-                        </div>
-                        <div className='w-1/2 border border-[#d3d3d3] p-4 rounded-md'>
+                        </div> */}
+                        <div className='w-full border border-[#d3d3d3] p-4 rounded-md'>
                             <TargetForm />
                         </div>
                     </div>
@@ -350,7 +350,7 @@ const Employee = ({ params }) => {
             }
 
             <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
-                <p className="mb-4"><b>Documents List</b></p>
+                {/* <p className="mb-4"><b>Documents List</b></p>
                 <ul className="flex gap-2 flex-wrap">
                     {documents.length > 0 ? (
                         documents.map((document) => (
@@ -369,7 +369,7 @@ const Employee = ({ params }) => {
                     ) : (
                         <p>No documents available</p>
                     )}
-                </ul>
+                </ul> */}
 
                 <div className='my-2'>
                     <h3><b>Tasks List</b></h3>
