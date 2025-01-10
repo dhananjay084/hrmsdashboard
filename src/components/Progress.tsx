@@ -16,7 +16,7 @@ const LeaveProgress = () => {
     "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
   ];
   const cookies = nookies.get(); // Get all cookies
-  let id = cookies.id;
+  const id = cookies.id;
 // Fetch Casual Leave Data
 const FetchCasual = async () => {
   try {
