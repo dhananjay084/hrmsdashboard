@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import UserIcon from "@/assests/user_icon.png";
 import Image from "next/image";
-import Documents from "@/assests/documents.jpg";
+// import Documents from "@/assests/documents.jpg";
 import TargetForm from "../../targetForm";
 import TargetList from "../../targetList";
 import nookies from "nookies";
@@ -17,7 +17,7 @@ const Employee = ({ params }) => {
     // const [error] = useState(null);
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState("");
-    const [file, setFile] = useState(null);
+    // const [file, setFile] = useState(null);
     // const [success] = useState("");
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState("");
