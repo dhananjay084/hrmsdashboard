@@ -82,7 +82,7 @@ const PunchInOut = () => {
                 (position) => {
                     const { latitude, longitude } = position.coords;
                     setLocation({ latitude, longitude });
-                    alert(`Location fetched successfully! Latitude: ${latitude}, Longitude: ${longitude}`); // Alert with details
+                    toast.success(`Location fetched successfully! Latitude: ${latitude}, Longitude: ${longitude}`); // Alert with details
                     console.log('Fetched Location:', { latitude, longitude });
                 },
                 (error) => {

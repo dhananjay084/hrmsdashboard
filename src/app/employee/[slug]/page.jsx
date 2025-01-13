@@ -7,6 +7,8 @@ import TargetForm from "../../targetForm";
 import TargetList from "../../targetList";
 import nookies from "nookies";
 import { ToastContainer, toast } from 'react-toastify';
+import LeaveTable from "../../../components/leaveTable"
+import PunchRecordsTable  from "../../../components/punchRecordTable"
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -21,6 +23,8 @@ const Employee = ({ params }) => {
     // const [success] = useState("");
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState("");
+    const [leaves, setleaves] = useState("");
+
     // const [documents, setDocuments] = useState([]);
     const [newAnnouncement, setNewAnnouncement] = useState("");
 
@@ -42,6 +46,7 @@ const Employee = ({ params }) => {
                     toast.error("Error fetching user details");
                 }
             };
+
 
             fetchUserDetails();
         }
@@ -90,6 +95,27 @@ const Employee = ({ params }) => {
 
         // fetchDocuments();
         fetchTasks();
+    }, [slug]);
+    useEffect(() => {
+        if (slug) {
+            const fetchLeaveDetails = async () => {
+                try {
+                    const res = await fetch(`https://hrmsnode.onrender.com/api/leaves/${slug}`);
+                    if (!res.ok) {
+                        throw new Error("User not found");
+                    }
+                    const data = await res.json();
+                    setleaves(data);
+                    console.log("users", data);
+                } catch (err) {
+                    console.log(err);
+                    toast.error("Error fetching user details");
+                }
+            };
+
+
+            fetchLeaveDetails();
+        }
     }, [slug]);
 
 
@@ -398,7 +424,16 @@ const Employee = ({ params }) => {
                     <TargetList userId={slug} />
                 </div>
             </div>
+            <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
+                <h3 className="my-2"><b>Leaves</b></h3>
+                {slug && <LeaveTable userId={slug} />}
+            </div>
+            <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
+            <h3 className="my-2"><b>Punch Records</b></h3>
+      {slug && <PunchRecordsTable userId={slug} />}
+    </div>
         </>
+
     );
 };
 
