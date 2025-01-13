@@ -53,6 +53,7 @@ const PunchRecordsTable = ({ userId }) => {
   };
 
   return (
+    punchRecords &&
     <div>
       <div className='mb-2'>
         

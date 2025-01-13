@@ -61,6 +61,7 @@ const LeaveTable = ({ userId }) => {
   }
 
   return (
+    leaves &&
     <div>
       {/* Filters */}
       <div className="mb-4 flex gap-4">

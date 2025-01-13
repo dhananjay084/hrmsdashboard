@@ -8,7 +8,7 @@ import TargetList from "../../targetList";
 import nookies from "nookies";
 import { ToastContainer, toast } from 'react-toastify';
 import LeaveTable from "../../../components/leaveTable"
-import PunchRecordsTable  from "../../../components/punchRecordTable"
+import PunchRecordsTable from "../../../components/punchRecordTable"
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -95,7 +95,7 @@ const Employee = ({ params }) => {
         // fetchDocuments();
         fetchTasks();
     }, [slug]);
- 
+
 
 
     // const handleSubmit = async (e) => {
@@ -375,26 +375,28 @@ const Employee = ({ params }) => {
                         <p>No documents available</p>
                     )}
                 </ul> */}
-
-                <div className='my-2'>
-                    <h3><b>Tasks List</b></h3>
-                    <ul>
-                        {tasks.map(task => (
-                            <li key={task._id} className="flex justify-between items-center border p-2 my-2">
-                                <span>{task.task}</span>
-                                {
-                                    role === 'Admin' &&
-                                    <button
-                                        onClick={() => handleDeleteTask(task._id)}
-                                        className="text-red-500"
-                                    >
-                                        Delete
-                                    </button>
-                                }
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                {
+                    tasks &&
+                    <div className='my-2'>
+                        <h3><b>Tasks List</b></h3>
+                        <ul>
+                            {tasks.map(task => (
+                                <li key={task._id} className="flex justify-between items-center border p-2 my-2">
+                                    <span>{task.task}</span>
+                                    {
+                                        role === 'Admin' &&
+                                        <button
+                                            onClick={() => handleDeleteTask(task._id)}
+                                            className="text-red-500"
+                                        >
+                                            Delete
+                                        </button>
+                                    }
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                }
             </div>
 
             <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
@@ -407,10 +409,10 @@ const Employee = ({ params }) => {
                 <h3 className="my-2"><b>Leaves</b></h3>
                 {slug && <LeaveTable userId={slug} />}
             </div>
-            <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
-            <h3 className="my-2"><b>Punch Records</b></h3>
-      {slug && <PunchRecordsTable userId={slug} />}
-    </div>
+            {/* <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
+                <h3 className="my-2"><b>Punch Records</b></h3>
+                {slug && <PunchRecordsTable userId={slug} />}
+            </div> */}
         </>
 
     );

@@ -66,88 +66,92 @@ const TargetList = ({ userId }) => {
 
     return (
         <div>
-            <div className="flex gap-2 my-2">
-                <select
-                    name="month"
-                    onChange={handleFilterChange}
-                    className="border border-[#d5d5d5] p-2 rounded-lg"
-                >
-                    <option value="">Filter by Month</option>
-                    {months.map((month) => (
-                        <option key={month.value} value={month.value}>
-                            {month.label}
-                        </option>
-                    ))}
-                </select>
-                <select
-                    name="year"
-                    onChange={handleFilterChange}
-                    className="border border-[#d5d5d5] p-2 rounded-lg"
-                >
-                    <option value="">Filter by Year</option>
-                    {[...Array(10)].map((_, index) => {
-                        const year = new Date().getFullYear() - index;
-                        return (
-                            <option key={year} value={year}>
-                                {year}
-                            </option>
-                        );
-                    })}
-                </select>
-            </div>
-            <table className="w-full border border-[#d5d5d5]">
-                <thead className="border border-[#d5d5d5] font-bold">
-                    <tr className="border border-[#d5d5d5]">
-                        <td className="p-2 border border-[#d5d5d5]">Month</td>
-                        <td className="p-2 border border-[#d5d5d5]">Year</td>
-                        <td className="p-2 border border-[#d5d5d5]">Target</td>
-                        <td className="p-2 border border-[#d5d5d5]">
-                            Target Achieved
-                        </td>
-                        <td className="p-2 border border-[#d5d5d5]">Profit (%)</td>
-                        <td className="p-2 border border-[#d5d5d5]">Action</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {targets.map((target) => (
-                        <tr key={target._id} className="border border-[#d5d5d5]">
-                            <td className="p-2 border border-[#d5d5d5]">
-                                {months.find((month) => month.value === target.month)?.label}
-                            </td>
-                            <td className="p-2 border border-[#d5d5d5]">
-                                {target.year}
-                            </td>
-                            <td className="p-2 border border-[#d5d5d5]">
-                                {target.target}
-                            </td>
-                            <td className="p-2 border border-[#d5d5d5]">
-                                <input
-                                    type="text"
-                                    value={target.targetCompleted}
-                                    onChange={(e) =>
-                                        handleCompletedChange(target._id, e.target.value)
-                                    }
-                                    className="border border-[#d5d5d5] rounded-lg p-2 focus:outline-none"
-                                />
-                            </td>
-                            <td className="p-2 border border-[#d5d5d5]">
-                                {((target.targetCompleted / target.target) * 100 || 0).toFixed(2)}
-                            </td>
-                            <td className="p-2 border border-[#d5d5d5]">
-                                <button
-                                    onClick={() =>
-                                        handleSave(target._id, target.targetCompleted)
-                                    }
-                                    className="bg-blue-500 text-white rounded-lg p-2 hover:bg-blue-600 w-full"
-                                >
-                                    Save
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
+            {
+                targets &&
+                <>
+                    <div className="flex gap-2 my-2">
+                        <select
+                            name="month"
+                            onChange={handleFilterChange}
+                            className="border border-[#d5d5d5] p-2 rounded-lg"
+                        >
+                            <option value="">Filter by Month</option>
+                            {months.map((month) => (
+                                <option key={month.value} value={month.value}>
+                                    {month.label}
+                                </option>
+                            ))}
+                        </select>
+                        <select
+                            name="year"
+                            onChange={handleFilterChange}
+                            className="border border-[#d5d5d5] p-2 rounded-lg"
+                        >
+                            <option value="">Filter by Year</option>
+                            {[...Array(10)].map((_, index) => {
+                                const year = new Date().getFullYear() - index;
+                                return (
+                                    <option key={year} value={year}>
+                                        {year}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
+                    <table className="w-full border border-[#d5d5d5]">
+                        <thead className="border border-[#d5d5d5] font-bold">
+                            <tr className="border border-[#d5d5d5]">
+                                <td className="p-2 border border-[#d5d5d5]">Month</td>
+                                <td className="p-2 border border-[#d5d5d5]">Year</td>
+                                <td className="p-2 border border-[#d5d5d5]">Target</td>
+                                <td className="p-2 border border-[#d5d5d5]">
+                                    Target Achieved
+                                </td>
+                                <td className="p-2 border border-[#d5d5d5]">Profit (%)</td>
+                                <td className="p-2 border border-[#d5d5d5]">Action</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {targets.map((target) => (
+                                <tr key={target._id} className="border border-[#d5d5d5]">
+                                    <td className="p-2 border border-[#d5d5d5]">
+                                        {months.find((month) => month.value === target.month)?.label}
+                                    </td>
+                                    <td className="p-2 border border-[#d5d5d5]">
+                                        {target.year}
+                                    </td>
+                                    <td className="p-2 border border-[#d5d5d5]">
+                                        {target.target}
+                                    </td>
+                                    <td className="p-2 border border-[#d5d5d5]">
+                                        <input
+                                            type="text"
+                                            value={target.targetCompleted}
+                                            onChange={(e) =>
+                                                handleCompletedChange(target._id, e.target.value)
+                                            }
+                                            className="border border-[#d5d5d5] rounded-lg p-2 focus:outline-none"
+                                        />
+                                    </td>
+                                    <td className="p-2 border border-[#d5d5d5]">
+                                        {((target.targetCompleted / target.target) * 100 || 0).toFixed(2)}
+                                    </td>
+                                    <td className="p-2 border border-[#d5d5d5]">
+                                        <button
+                                            onClick={() =>
+                                                handleSave(target._id, target.targetCompleted)
+                                            }
+                                            className="bg-blue-500 text-white rounded-lg p-2 hover:bg-blue-600 w-full"
+                                        >
+                                            Save
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </>
+            }
             {/* Toast container to render toast messages */}
             <ToastContainer />
         </div>
