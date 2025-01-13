@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // Office Coordinates
 const officeCoordinates = [
     { latitude: 28.444781580071357, longitude: 77.0597615823928 },
-    { latitude: 23.867528, longitude: 86.159467 },
+    { latitude: 23.867488, longitude: 86.159440 },
 ];
 
 const PunchInOut = () => {
@@ -76,20 +76,18 @@ const PunchInOut = () => {
             console.error('Error fetching punch records for selected date:', error);
         }
     };
-
-    // Get the current location of the user
     const getLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    setLocation({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                    });
+                    const { latitude, longitude } = position.coords;
+                    setLocation({ latitude, longitude });
+                    alert(`Location fetched successfully! Latitude: ${latitude}, Longitude: ${longitude}`); // Alert with details
+                    console.log('Fetched Location:', { latitude, longitude });
                 },
                 (error) => {
-                    console.log(error);
-                    toast.error('Error getting location. Please try again.');
+                    console.error('Geolocation Error:', error);
+                    toast.error('Error getting location. Please enable location services and try again.');
                 },
                 { timeout: 10000 } // Timeout after 10 seconds if location is not fetched
             );
@@ -97,10 +95,9 @@ const PunchInOut = () => {
             toast.error('Geolocation is not supported by this browser.');
         }
     };
-
+    
     // Haversine formula to calculate the distance between two coordinates
     const haversineDistance = (lat1, lon1, lat2, lon2) => {
-        console.log(lat1, lon1, lat2, lon2)
         const R = 6371; // Earth radius in km
         const dLat = (lat2 - lat1) * (Math.PI / 180);
         const dLon = (lon2 - lon1) * (Math.PI / 180);
@@ -110,22 +107,26 @@ const PunchInOut = () => {
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         const distance = R * c; // Distance in km
+        console.log('Calculated Distance (km):', distance);
         return distance;
     };
-
+    
     // Function to handle Punch-In action
     const punchIn = async () => {
         const { latitude, longitude } = location;
     
-        // Check if location is available
         if (!latitude || !longitude) {
-            toast.error('Location not available. Please get location first.');
+            toast.error('Location not available. Please fetch location first.');
+            return;
+        }
+    
+        if (isPunchInDisabled) {
+            toast.info('Already punched in!');
             return;
         }
     
         let isWithinRadius = false;
     
-        // Check distance to all office coordinates
         for (const coord of officeCoordinates) {
             const distance = haversineDistance(
                 latitude,
@@ -134,11 +135,9 @@ const PunchInOut = () => {
                 coord.longitude
             );
     
-            console.log(`Distance to (${coord.latitude}, ${coord.longitude}):`, distance);
-    
-            if (distance <= 1) { // Check if within 1 km radius
+            if (distance <= 2) {
                 isWithinRadius = true;
-                break; // No need to check further if within radius of one point
+                break;
             }
         }
     
@@ -150,49 +149,54 @@ const PunchInOut = () => {
                     longitude,
                 });
     
-                console.log('Punch-In Response:', response);
+                console.log('Punch-In API Response:', response);
     
-                // Check the response data and update status accordingly
-                if (response.data) {
-                    toast.success('Punch-in recorded successfully!');
-                    fetchTodayPunchRecords(); // Fetch today's punch records after successful punch-in
+                if (response.status === 200 && response.data?.success) {
+                    toast.success(response.data.message || 'Punch-in recorded successfully!');
+                    fetchTodayPunchRecords();
                 } else {
-                    toast.error('Error recording punch-in.');
+                    toast.error(response.data.message || 'Error recording punch-in. Please try again.');
                 }
             } catch (error) {
-                console.log('Punch-In Error:', error);
-                toast.error('Error recording punch-in.');
+                console.error('Punch-In Error:', error);
+                toast.error('Failed to record punch-in. Server error.');
             }
         } else {
-            // If not within 1 km of any office coordinates, show error message
-            toast.error('Not in office (Location outside 1km radius of any office)');
+            toast.error('Not in office. Your location is outside the 2 km radius.');
         }
     };
-
+    
+    
     // Function to handle Punch-Out action
     const punchOut = async () => {
         const { latitude, longitude } = location;
-
-        // Check if location is available
+    
         if (!latitude || !longitude) {
-            toast.error('Location not available. Please get location first.');
+            toast.error('Location not available. Please fetch location first.');
             return;
         }
-
+    
         try {
             const response = await axios.post('https://hrmsnode.onrender.com/api/punch/punch-out', {
                 userId,
                 latitude,
                 longitude,
             });
-            console.log('Punch-Out Response:', response);
-            toast.success('Punch-out recorded successfully!');
-            fetchTodayPunchRecords();  // Fetch today's punch records after successful punch-out
+    
+            console.log('Punch-Out API Response:', response);
+    
+            if (response.status === 200 && response.data?.success) {
+                toast.success(response.data.message || 'Punch-out recorded successfully!');
+                fetchTodayPunchRecords(); // Update punch-out status
+            } else {
+                toast.error(response.data.message || 'Error recording punch-out. Please try again.');
+            }
         } catch (error) {
-            console.log('Punch-Out Error:', error);
-            toast.error('Error recording punch-out.');
+            console.error('Punch-Out Error:', error);
+            toast.error('Failed to record punch-out. Server error.');
         }
     };
+    
 
     // Handle date change and fetch records for selected date
     const handleDateChange = (event) => {
