@@ -8,7 +8,7 @@ import TargetList from "../../targetList";
 import nookies from "nookies";
 import { ToastContainer, toast } from 'react-toastify';
 import LeaveTable from "../../../components/leaveTable"
-import PunchRecordsTable from "../../../components/punchRecordTable"
+// import PunchRecordsTable from "../../../components/punchRecordTable"
 import 'react-toastify/dist/ReactToastify.css';
 
 
