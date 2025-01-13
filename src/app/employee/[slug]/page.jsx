@@ -7,8 +7,7 @@ import TargetForm from "../../targetForm";
 import TargetList from "../../targetList";
 import nookies from "nookies";
 import { ToastContainer, toast } from 'react-toastify';
-import LeaveTable from "../../../components/leaveTable"
-// import PunchRecordsTable from "../../../components/punchRecordTable"
+import LeaveTable from "../../../components/leaveTable";
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -409,10 +408,7 @@ const Employee = ({ params }) => {
                 <h3 className="my-2"><b>Leaves</b></h3>
                 {slug && <LeaveTable userId={slug} />}
             </div>
-            {/* <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
-                <h3 className="my-2"><b>Punch Records</b></h3>
-                {slug && <PunchRecordsTable userId={slug} />}
-            </div> */}
+           
         </>
 
     );

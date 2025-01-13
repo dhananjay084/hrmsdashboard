@@ -69,12 +69,14 @@ const ClientCalendar = () => {
           return eventsArray;
         });
 
-        // Combine the fetched events with the holidays
-        setEvents([...generatedEvents, ...holidays]);
+        // Ensure holidays are always visible by setting them first in the state
+        setEvents([...holidays, ...generatedEvents]);
 
         console.log("Generated events:", generatedEvents);
       } catch (error) {
         console.error("Error fetching leaves data:", error);
+        // In case of error, still show holidays
+        setEvents(holidays);
       }
     };
 
