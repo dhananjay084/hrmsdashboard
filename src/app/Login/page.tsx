@@ -19,6 +19,8 @@ interface Value {
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false); // State for loading
+  const [showForgotPassword, setShowForgotPassword] = useState(false); // State for forgot password modal
+  const [passwordReset, setPasswordReset] = useState(false); // State to show the reset message after successful reset
   const navigation = useRouter();
 
   const handleClickShowPassword = () => {
@@ -30,11 +32,23 @@ export default function Login() {
     password: "",
   };
 
+  const forgotPasswordInitialValues = {
+    email: "",
+    newPassword: "",
+  };
+
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
     password: Yup.string().required("Password is required"),
+  });
+
+  const forgotPasswordValidationSchema = Yup.object({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Please enter your email address"),
+    newPassword: Yup.string().required("Please enter a new password"),
   });
 
   const onSubmit = async (values: Value) => {
@@ -86,6 +100,40 @@ export default function Login() {
       setLoading(false); // Stop loading
     }
   };
+
+  const handleForgotPasswordSubmit = async (values: { email: string, newPassword: string }) => {
+    try {
+      // Simulate an API request to reset the password
+      const response = await fetch('https://hrmsnode.onrender.com/api/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),  // Sending email and new password to the API
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        // Handle successful password reset
+        setPasswordReset(true); // Show success state
+        toast.success('Password reset successful! You can now log in with your new password.', {
+          autoClose: 3000,
+        });
+      } else {
+        // Handle API failure (e.g., invalid email or server error)
+        toast.error(`Error: ${data.message || 'Something went wrong, please try again.'}`, {
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.error("Error during password reset:", error);
+      toast.error('Error resetting password, please try again!', {
+        autoClose: 2000,
+      });
+    }
+  };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen text-left w-full bg-[url('/LoginBackground.jpg')] bg-cover bg-center">
@@ -139,7 +187,70 @@ export default function Login() {
             </div>
           </Form>
         </Formik>
+
+        <div className="mt-4 text-center">
+          <button 
+            className="text-blue-500"
+            onClick={() => setShowForgotPassword(true)} // Show Forgot Password form
+          >
+            Forgot Password?
+          </button>
+        </div>
       </div>
+
+      {/* Forgot Password Modal */}
+      {showForgotPassword && !passwordReset && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[300px]">
+            <h3 className="text-xl font-semibold text-center mb-4">Reset Your Password</h3>
+
+            <Formik
+              initialValues={forgotPasswordInitialValues}
+              validationSchema={forgotPasswordValidationSchema}
+              onSubmit={handleForgotPasswordSubmit}
+            >
+              <Form>
+                <div className="mb-4">
+                  <Field
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full p-3 border border-gray-300 rounded-md text-gray-700"
+                  />
+                  <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+                <div className="mb-4">
+                  <Field
+                    name="newPassword"
+                    type="password"
+                    placeholder="Enter a new password"
+                    className="w-full p-3 border border-gray-300 rounded-md text-gray-700"
+                  />
+                  <ErrorMessage name="newPassword" component="div" className="text-red-500 text-sm mt-1" />
+                </div>
+
+                <div>
+                  <button 
+                    type="submit" 
+                    className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition duration-300"
+                  >
+                    Reset Password
+                  </button>
+                </div>
+              </Form>
+            </Formik>
+
+            <div className="text-center mt-4">
+              <button 
+                className="text-blue-500"
+                onClick={() => setShowForgotPassword(false)} // Close modal
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Toast Container */}
       <ToastContainer position="top-right" autoClose={1000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
