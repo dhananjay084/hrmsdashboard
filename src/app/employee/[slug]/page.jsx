@@ -23,7 +23,6 @@ const Employee = ({ params }) => {
     // const [success] = useState("");
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState("");
-    const [leaves, setleaves] = useState("");
 
     // const [documents, setDocuments] = useState([]);
     const [newAnnouncement, setNewAnnouncement] = useState("");
@@ -96,27 +95,7 @@ const Employee = ({ params }) => {
         // fetchDocuments();
         fetchTasks();
     }, [slug]);
-    useEffect(() => {
-        if (slug) {
-            const fetchLeaveDetails = async () => {
-                try {
-                    const res = await fetch(`https://hrmsnode.onrender.com/api/leaves/${slug}`);
-                    if (!res.ok) {
-                        throw new Error("User not found");
-                    }
-                    const data = await res.json();
-                    setleaves(data);
-                    console.log("users", data);
-                } catch (err) {
-                    console.log(err);
-                    toast.error("Error fetching user details");
-                }
-            };
-
-
-            fetchLeaveDetails();
-        }
-    }, [slug]);
+ 
 
 
     // const handleSubmit = async (e) => {
