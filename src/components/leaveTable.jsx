@@ -6,7 +6,6 @@ const LeaveTable = ({ userId }) => {
   const [leaveType, setLeaveType] = useState('');
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
-  const [errorMessage, setErrorMessage] = useState(''); // To store error message
   const [noData, setNoData] = useState(false); // To check if no data found
 
   // Fetch leaves with filters
@@ -24,7 +23,6 @@ const LeaveTable = ({ userId }) => {
         );
 
         if (res.status === 404) {
-          setErrorMessage("No leaves found matching the filter criteria");
           setLeaves([]); // No leaves found, clear any previous leaves data
           setNoData(true); // Set the noData flag
         } else if (!res.ok) {
@@ -32,12 +30,10 @@ const LeaveTable = ({ userId }) => {
         } else {
           const data = await res.json();
           setNoData(false); // Data found, reset the noData flag
-          setErrorMessage(''); // Clear error message
           setLeaves(data);
         }
       } catch (err) {
         console.log(err);
-        setErrorMessage("An error occurred while fetching the data.");
         setLeaves([]); // In case of an error, clear leaves data
         setNoData(true);
       } finally {
