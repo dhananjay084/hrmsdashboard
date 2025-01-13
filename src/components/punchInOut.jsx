@@ -5,10 +5,10 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Office Coordinates
-const officeCoordinates = {
-    
-    latitude:  28.444781580071357,longitude: 77.0597615823928
-};
+const officeCoordinates = [
+    { latitude: 28.444781580071357, longitude: 77.0597615823928 },
+    { latitude: 23.867528, longitude: 86.159467 },
+];
 
 const PunchInOut = () => {
     const [location, setLocation] = useState({ latitude: '', longitude: '' });
@@ -116,32 +116,46 @@ const PunchInOut = () => {
     // Function to handle Punch-In action
     const punchIn = async () => {
         const { latitude, longitude } = location;
-
+    
         // Check if location is available
         if (!latitude || !longitude) {
             toast.error('Location not available. Please get location first.');
             return;
         }
-
-        // Calculate distance between office and user location
-        const distance = haversineDistance(latitude, longitude, officeCoordinates.latitude, officeCoordinates.longitude);
-        console.log("Distance calculated:", distance); // Debugging log
-
-        // Check if the distance is within 2 km
-        if (distance <= 2) { // User is within 2 km radius of office
+    
+        let isWithinRadius = false;
+    
+        // Check distance to all office coordinates
+        for (const coord of officeCoordinates) {
+            const distance = haversineDistance(
+                latitude,
+                longitude,
+                coord.latitude,
+                coord.longitude
+            );
+    
+            console.log(`Distance to (${coord.latitude}, ${coord.longitude}):`, distance);
+    
+            if (distance <= 1) { // Check if within 1 km radius
+                isWithinRadius = true;
+                break; // No need to check further if within radius of one point
+            }
+        }
+    
+        if (isWithinRadius) {
             try {
                 const response = await axios.post('https://hrmsnode.onrender.com/api/punch/punch-in', {
                     userId,
                     latitude,
                     longitude,
                 });
-
+    
                 console.log('Punch-In Response:', response);
-
+    
                 // Check the response data and update status accordingly
                 if (response.data) {
                     toast.success('Punch-in recorded successfully!');
-                    fetchTodayPunchRecords();  // Fetch today's punch records after successful punch-in
+                    fetchTodayPunchRecords(); // Fetch today's punch records after successful punch-in
                 } else {
                     toast.error('Error recording punch-in.');
                 }
@@ -150,8 +164,8 @@ const PunchInOut = () => {
                 toast.error('Error recording punch-in.');
             }
         } else {
-            // If not within 2 km, show error message
-            toast.error('Not in office (Location outside 2km radius)');
+            // If not within 1 km of any office coordinates, show error message
+            toast.error('Not in office (Location outside 1km radius of any office)');
         }
     };
 
