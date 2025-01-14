@@ -11,6 +11,7 @@ import LeaveTable from "../../../components/leaveTable";
 import PunchTable from "../../../components/punchTable";
 import UploadDocument from "../../../components/uploadDocument"
 import 'react-toastify/dist/ReactToastify.css';
+import Payslip from "../../../components/payslip";
 
 
 const Employee = ({ params }) => {
@@ -387,7 +388,7 @@ const Employee = ({ params }) => {
             </div>
             <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
 
-            <UploadDocument/>
+                <UploadDocument />
             </div>
 
             <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
@@ -401,10 +402,13 @@ const Employee = ({ params }) => {
                 {slug && <LeaveTable userId={slug} />}
             </div>
             {
-                role ==='Admin' &&
+                role === 'Admin' &&
                 <div >
                     <PunchTable />
+                    <Payslip />
+
                 </div>
+
             }
 
         </>

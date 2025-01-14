@@ -11,9 +11,10 @@ import { FaBirthdayCake } from "react-icons/fa";
 import LeaveFormModal from "@/components/modal/addLeave";
 import Punch from "@/components/punchInOut"
 import nookies from "nookies";
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck ,FaTrash} from "react-icons/fa6";
 
 import { toast } from 'react-toastify';
+import axios from "axios";
 
 // User Interface
 interface User {
@@ -33,10 +34,10 @@ interface User {
     password: string;
     __v: number;
     refreshToken: string;
-  }
-  
-  // Leave Interface
-  interface Leave {
+}
+
+// Leave Interface
+interface Leave {
     _id: string;
     userId: User;  // Nested User object
     startDate: string;
@@ -48,8 +49,8 @@ interface User {
     createdAt: string;
     updatedAt: string;
     __v: number;
-  }
-  
+}
+
 type LeaveData = {
     Casual: number;
     Planned: number;
@@ -65,8 +66,8 @@ type LeaveDataCount = {
 interface Announcement {
     _id: string;
     announcement: string;
-  }
-  interface Users {
+}
+interface Users {
     _id: string;
     firstName: string;
     lastName: string;
@@ -83,8 +84,8 @@ interface Announcement {
     password: string;
     __v: number;
     refreshToken: string;
-  }
-  
+}
+
 const Dashboard = () => {
     // const [selected, setSelected] = useState('Leaves');
     const [isLeaveFormOpen, setIsLeaveFormOpen] = useState(false);
@@ -117,7 +118,7 @@ const Dashboard = () => {
                 }
 
                 const data = await response.json();
-            
+
                 setLeaveData(data.leaveBalances);
                 setLeaveDataCount(data.totalLeavesApplied);
             } catch (error) {
@@ -134,7 +135,7 @@ const Dashboard = () => {
                 }
                 const data = await response.json();
                 const totalNoOfDays = data.map((leave: { noOfDays: unknown; }) => leave.noOfDays).reduce((acc: number, curr: number) => acc + curr, 0);
-             
+
                 setMonthlyCasual(totalNoOfDays);
             } catch (error) {
                 console.log("Error fetching data", error);
@@ -149,7 +150,7 @@ const Dashboard = () => {
                 }
                 const data = await response.json();
                 const totalNoOfDays = data.map((leave: { noOfDays: unknown; }) => leave.noOfDays).reduce((acc: number, curr: number) => acc + curr, 0);
-              
+
                 setMonthlyPlanned(totalNoOfDays);
             } catch (error) {
                 console.log("Error fetching data", error);
@@ -164,14 +165,14 @@ const Dashboard = () => {
                 }
                 const data = await response.json();
                 const totalNoOfDays = data.map((leave: { noOfDays: unknown; }) => leave.noOfDays).reduce((acc: number, curr: number) => acc + curr, 0);
-             
+
                 setMonthlySick(totalNoOfDays);
             } catch (error) {
                 console.log("Error fetching data", error);
             }
         };
 
-  
+
         const FetchAllLeaves = async () => {
             try {
                 // Make the API request
@@ -244,24 +245,24 @@ const Dashboard = () => {
                 },
                 body: JSON.stringify({ status }),
             });
-    
+
             if (!response.ok) {
                 throw new Error('Failed to update leave status');
             }
-    
+
             // After successful API call, update the state
             setLeaves(prevLeaves =>
                 prevLeaves.map(leave =>
                     leave._id === leaveId ? { ...leave, status } : leave
                 )
             );
-    
+
             // Show success toast
             toast.success('Leave status updated successfully!');
-    
+
         } catch (error) {
             console.error('Error updating leave status:', error);
-    
+
             // Show error toast
             toast.error('Failed to update leave status');
         }
@@ -290,10 +291,25 @@ const Dashboard = () => {
 
         fetchAnnouncements();
     }, []);
+    const deleteLeaveHandler = async (leaveId: string) => {
+        try {
+          await axios.delete(`https://hrmsnode.onrender.com/api/leaves/${leaveId}`);  // Replace with your delete API endpoint
+          // After successful deletion, show a toast and refresh data
+          toast.success('Leave deleted successfully', {
+            onClose: () => {
+            window.location.reload();// Call function to refresh the leave list after the toast is closed
+            }
+          });
+        } catch (error) {
+          console.error('Error deleting leave:', error);
+          toast.error('Failed to delete leave');
+        } finally {
+        }
+      };
     return (
         <>
             <div>
-       <Punch/>
+                <Punch />
                 <div className="flex gap-2">
                     <div className=" rounded-mid shadow-md p-4 w-1/4 bg-white flex justify-between items-center" >
                         <span>
@@ -306,8 +322,8 @@ const Dashboard = () => {
 
                         </span>
                         <span className='flex flex-col items-center gap-2'>
-                            <MdBreakfastDining className="w-[50px] h-[50px]"  />
-                            <button className="bg-[#3788D8] px-2 py-1 rounded-lg text-white"  onClick={() => setIsLeaveFormOpen(true)}
+                            <MdBreakfastDining className="w-[50px] h-[50px]" />
+                            <button className="bg-[#3788D8] px-2 py-1 rounded-lg text-white" onClick={() => setIsLeaveFormOpen(true)}
                             >Apply CL</button>
                         </span>
                     </div>
@@ -337,7 +353,7 @@ const Dashboard = () => {
 
                         </span>
                         <span className='flex flex-col items-center gap-2'>
-                            <MdSick className="h-[50px] w-[50px]"  />
+                            <MdSick className="h-[50px] w-[50px]" />
                             <button className="bg-[#3788D8] px-2 py-1 rounded-lg text-white" onClick={() => setIsLeaveFormOpen(true)}
                             >Apply SL</button>
 
@@ -350,7 +366,7 @@ const Dashboard = () => {
 
                         </span>
                         <span className='flex flex-col items-center gap-2'>
-                            <MdAddHomeWork className="h-[50px] w-[50px]"  />
+                            <MdAddHomeWork className="h-[50px] w-[50px]" />
                             <button className="bg-[#3788D8] px-2 py-1 rounded-lg text-white" onClick={() => setIsLeaveFormOpen(true)}
                             >Apply WFH</button>
 
@@ -361,12 +377,12 @@ const Dashboard = () => {
                     <div className='w-[20%] text-center rounded-mid p-4 shadow-md bg-white'>
                         <h2 className='text-lg'><b>Monthly Status</b></h2>
                         <div className='max-h-[300px] overflow-y-scroll' style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                        <ProgressBar
+                            <ProgressBar
                             // Causal={MonthlyCasual || 0}
                             // Planned={MonthlyPlanned || 0}
                             // Sick={MonthlySick || 0}
                             // WFH={leaveDataCount.WFH || 0}
-                        />
+                            />
                         </div>
                         <div className='flex itmes-center justify-center gap-4 mt-4 px-4 py-2 rounded-mid text-lg font-bold'>
                             Applied Requests
@@ -385,14 +401,27 @@ const Dashboard = () => {
                                             <span className='flex'>
                                                 <p>{formatDate(leave.startDate)}</p> - <p>{formatDate(leave.endDate)}</p>
                                             </span>
-                                            {  role === 'Admin' &&
-                                            <button
-                                                onClick={() => updateLeaveStatus(leave._id, 'Approved')}
-                                                style={{ cursor: 'pointer' }}
-                                                className="bg-[#3788D8] px-2 py-1 rounded-lg text-white">
-                                               <FaCheck />
-                                            </button>
-}
+                                            {role === 'Admin' && (
+                                                <>
+                                                    <button
+                                                        onClick={() => updateLeaveStatus(leave._id, 'Approved')}
+                                                        style={{ cursor: 'pointer' }}
+                                                        className="bg-[#3788D8] px-2 py-1 rounded-lg text-white"
+                                                    >
+                                                        <FaCheck />
+                                                    </button>
+
+                                                    {/* Delete Icon */}
+                                                    <button
+                                                        onClick={() => deleteLeaveHandler(leave._id)}
+                                                        style={{ cursor: 'pointer' }}
+                                                        className="bg-red-600 px-2 py-1 rounded-lg text-white"
+                                                       
+                                                    >
+                                                        <FaTrash />
+                                                    </button>
+                                                </>
+                                            )}
                                         </span>
                                     </li>
                                 ))}
@@ -406,20 +435,20 @@ const Dashboard = () => {
                     <div className='w-[20%] text-center rounded-mid p-4 shadow-md bg-white'>
                         <h2 className='text-lg'><b>Annoucements</b></h2>
                         <div className='max-h-[300px]  overflow-y-scroll' style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                        <ul>
-                            {announcements.map((announcement) => (
-                                <li key={announcement._id} className="mt-2">
-                                    <div className="flex justify-between items-center border border-[#d3d3d3] p-2 rounded-mid">
-                                        <span className="flex items-start items-center gap-2">
-                                            <GrAnnounce />
-                                            <span className="text-left">
-                                                <p className="text-sm">{announcement.announcement}</p>
+                            <ul>
+                                {announcements.map((announcement) => (
+                                    <li key={announcement._id} className="mt-2">
+                                        <div className="flex justify-between items-center border border-[#d3d3d3] p-2 rounded-mid">
+                                            <span className="flex items-start items-center gap-2">
+                                                <GrAnnounce />
+                                                <span className="text-left">
+                                                    <p className="text-sm">{announcement.announcement}</p>
+                                                </span>
                                             </span>
-                                        </span>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                         <h2 className='text-lg mt-4'><b>Birth Days</b></h2>
 
