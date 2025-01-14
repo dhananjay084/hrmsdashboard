@@ -51,7 +51,6 @@ const ClientCalendar = () => {
           throw new Error(`Error fetching leaves: ${response.statusText}`);
         }
         const data: Leave[] = await response.json(); // Ensure data is of type Leave[]
-        console.log("Fetched data:", data);
 
         // Generate events for FullCalendar directly from the fetched data
         const generatedEvents: Event[] = data.flatMap((leave) => {
@@ -72,7 +71,6 @@ const ClientCalendar = () => {
         // Ensure holidays are always visible by setting them first in the state
         setEvents([...holidays, ...generatedEvents]);
 
-        console.log("Generated events:", generatedEvents);
       } catch (error) {
         console.error("Error fetching leaves data:", error);
         // In case of error, still show holidays

@@ -83,7 +83,6 @@ export default function Login() {
         toast.success('Login successful!', {
           autoClose: 1000,
         });
-        console.log("Login successful:", data.user);
       } else {
         // Show error toast if login fails
         toast.error(`Login failed: ${data.message}`, {

@@ -40,7 +40,6 @@ const LeaveFormModal = ({ isOpen, close }) => {
           }, 1000); // Delay the closing of the modal by 1 second
         }
       });
-      console.log(response.data);
     } catch (error) {
       // Show error toast
       toast.error('Error creating leave request!');

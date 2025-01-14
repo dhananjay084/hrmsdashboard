@@ -21,7 +21,6 @@ const LeaveProgress = () => {
 const FetchCasual = async () => {
   try {
     const response = await fetch(`https://hrmsnode.onrender.com/api/leaves/${id}?month=${month}&year=${year}&leaveType=Casual`);
-    console.table([userId,response])
     if (!response.ok) throw new Error('Error fetching Casual leave');
     const data = await response.json();
     

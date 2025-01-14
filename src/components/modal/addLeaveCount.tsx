@@ -35,7 +35,6 @@ const LeaveAdjustmentModal: React.FC<LeaveAdjustmentModalProps> = ({ closeModal 
             try {
                 const response = await fetch('https://hrmsnode.onrender.com/api/users');
                 const data: User[] = await response.json();
-                console.log(data)
                 setUsers(data);
             } catch (error) {
                 console.error('Error fetching users:', error);

@@ -8,6 +8,7 @@ import TargetList from "../../targetList";
 import nookies from "nookies";
 import { ToastContainer, toast } from 'react-toastify';
 import LeaveTable from "../../../components/leaveTable";
+import PunchTable from "../../../components/punchTable";
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -38,7 +39,6 @@ const Employee = ({ params }) => {
                     }
                     const data = await res.json();
                     setUserDetails(data);
-                    console.log("users", data);
                 } catch (err) {
                     console.log(err);
                     toast.error("Error fetching user details");
@@ -71,7 +71,6 @@ const Employee = ({ params }) => {
             try {
                 const res = await fetch(`https://hrmsnode.onrender.com/api/task/${slug}`);
                 const data = await res.json();
-                console.log("tasks", data);
                 setTasks(data);
             } catch (err) {
                 console.log(err);
@@ -79,19 +78,7 @@ const Employee = ({ params }) => {
             }
         };
 
-        // const fetchDocuments = async () => {
-        //     try {
-        //         const res = await fetch(`https://hrmsnode.onrender.com/api/documents/${slug}`);
-        //         const data = await res.json();
-        //         console.log("documents", data);
-        //         setDocuments(data);
-        //     } catch (err) {
-        //         console.log(err);
-        //         toast.error("Error fetching documents");
-        //     }
-        // };
-
-        // fetchDocuments();
+      
         fetchTasks();
     }, [slug]);
 
@@ -407,6 +394,9 @@ const Employee = ({ params }) => {
             <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
                 <h3 className="my-2"><b>Leaves</b></h3>
                 {slug && <LeaveTable userId={slug} />}
+            </div>
+            <div >
+            <PunchTable/>
             </div>
            
         </>

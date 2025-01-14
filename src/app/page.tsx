@@ -117,7 +117,7 @@ const Dashboard = () => {
                 }
 
                 const data = await response.json();
-                console.log(data);
+            
                 setLeaveData(data.leaveBalances);
                 setLeaveDataCount(data.totalLeavesApplied);
             } catch (error) {
@@ -134,7 +134,7 @@ const Dashboard = () => {
                 }
                 const data = await response.json();
                 const totalNoOfDays = data.map((leave: { noOfDays: unknown; }) => leave.noOfDays).reduce((acc: number, curr: number) => acc + curr, 0);
-                console.log(totalNoOfDays);
+             
                 setMonthlyCasual(totalNoOfDays);
             } catch (error) {
                 console.log("Error fetching data", error);
@@ -149,7 +149,7 @@ const Dashboard = () => {
                 }
                 const data = await response.json();
                 const totalNoOfDays = data.map((leave: { noOfDays: unknown; }) => leave.noOfDays).reduce((acc: number, curr: number) => acc + curr, 0);
-                console.log(totalNoOfDays);
+              
                 setMonthlyPlanned(totalNoOfDays);
             } catch (error) {
                 console.log("Error fetching data", error);
@@ -164,27 +164,14 @@ const Dashboard = () => {
                 }
                 const data = await response.json();
                 const totalNoOfDays = data.map((leave: { noOfDays: unknown; }) => leave.noOfDays).reduce((acc: number, curr: number) => acc + curr, 0);
-                console.log(totalNoOfDays);
+             
                 setMonthlySick(totalNoOfDays);
             } catch (error) {
                 console.log("Error fetching data", error);
             }
         };
 
-        const FetchWFH = async () => {
-            try {
-                const response = await fetch(`https://hrmsnode.onrender.com/api/leaves/${userId}?month=${month}&year=${year}&leaveType=WFH`);
-                if (!response.ok) {
-                    throw new Error('Error fetching leaves');
-                }
-                const data = await response.json();
-                const totalNoOfDays = data.map((leave: { noOfDays: unknown; }) => leave.noOfDays).reduce((acc: number, curr: number) => acc + curr, 0);
-                console.log(totalNoOfDays);
-                // setMonthlyWFH(totalNoOfDays);
-            } catch (error) {
-                console.log("Error fetching data", error);
-            }
-        };
+  
         const FetchAllLeaves = async () => {
             try {
                 // Make the API request
@@ -203,11 +190,9 @@ const Dashboard = () => {
                 const data = await response.json();
 
                 // Log the data to ensure we received it
-                console.log('Fetched data:', data);
 
                 // Set the fetched data into the state
                 setLeaves(data);
-                console.log("leaves", data);
             } catch (error) {
                 // Log unknown errors that occur
                 console.error('Error fetching leaves data:', error);
@@ -217,10 +202,8 @@ const Dashboard = () => {
             .then(response => response.json())
             .then(data => {
                 setUsers(data);
-                console.log("data", data);
                 // Get the current month
                 const currentMonth = new Date().getMonth();
-                console.log("currentMonth", currentMonth);
                 // Filter users whose dob month matches the current month
                 const usersWithBirthdayThisMonth = data.filter((user: { dob: string | number | Date; }) => {
                     const dob = new Date(user.dob);
@@ -246,7 +229,6 @@ const Dashboard = () => {
         FetchCasual();
         FetchPlanned();
         FetchSick();
-        FetchWFH();
         FetchAllLeaves();
         // Cleanup function to clear interval when component unmounts
         return () => clearInterval(interval);
