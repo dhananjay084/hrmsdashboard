@@ -32,7 +32,7 @@ interface EmployeeCardProps {
 }
 
 const EmployeeCard: React.FC<EmployeeCardProps> = ({ employee }) => {
-  const { firstName, lastName, designation, gender, email, _id, empCode, salary, appraisalDate, joiningDate } = employee;
+  const { firstName, lastName, designation, gender, email, _id } = employee;
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState(employee);
   const cookies = nookies.get();
