@@ -9,6 +9,7 @@ import nookies from "nookies";
 import { ToastContainer, toast } from 'react-toastify';
 import LeaveTable from "../../../components/leaveTable";
 import PunchTable from "../../../components/punchTable";
+import UploadDocument from "../../../components/uploadDocument"
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -383,6 +384,10 @@ const Employee = ({ params }) => {
                         </ul>
                     </div>
                 }
+            </div>
+            <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
+
+            <UploadDocument/>
             </div>
 
             <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
