@@ -78,7 +78,7 @@ const Employee = ({ params }) => {
             }
         };
 
-      
+
         fetchTasks();
     }, [slug]);
 
@@ -395,10 +395,13 @@ const Employee = ({ params }) => {
                 <h3 className="my-2"><b>Leaves</b></h3>
                 {slug && <LeaveTable userId={slug} />}
             </div>
-            <div >
-            <PunchTable/>
-            </div>
-           
+            {
+                role ==='Admin' &&
+                <div >
+                    <PunchTable />
+                </div>
+            }
+
         </>
 
     );
