@@ -31,8 +31,7 @@ const LeaveFormModal = ({ isOpen, close }) => {
 
     try {
       const response = await axios.post('https://hrmsnode.onrender.com/api/leaves', formData);
-      
-      // Show success toast
+   if(response.status==201 && response.data.message=="Leave request created successfully"){
       toast.success('Leave request created successfully!', {
         onClose: () => {
           setTimeout(() => {
@@ -40,6 +39,7 @@ const LeaveFormModal = ({ isOpen, close }) => {
           }, 1000); // Delay the closing of the modal by 1 second
         }
       });
+    }
     } catch (error) {
       // Show error toast
       toast.error('Error creating leave request!');
