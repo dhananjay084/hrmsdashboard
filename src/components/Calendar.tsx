@@ -34,6 +34,8 @@ const ClientCalendar = () => {
     { title: 'Buddha Purnima', date: '2025-05-12' },
     { title: 'Id-ul-Zuha (Bakrid)', date: '2025-06-07' },
     { title: 'Muharram', date: '2025-07-06' },
+    { title: 'Rakhi', date: '2025-08-09' },
+
     { title: 'Independence Day', date: '2025-08-15' },
     { title: 'Milad-un-Nabi (Birthday of Prophet Mohammad)', date: '2025-09-05' },
     { title: 'Gandhi Jayanti/ Dusshera', date: '2025-10-02' },
