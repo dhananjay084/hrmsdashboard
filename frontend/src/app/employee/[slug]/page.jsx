@@ -213,7 +213,6 @@ const Employee = ({ params }) => {
         const FetchData = async (userIdFromUrl) => {
             try {
                 const response = await fetch(`https://hrmsnode.onrender.com/api/leavecount/getbalance/${userIdFromUrl}`);
-
                 if (!response.ok) {
                     throw new Error('Error fetching leaves');
                 }
