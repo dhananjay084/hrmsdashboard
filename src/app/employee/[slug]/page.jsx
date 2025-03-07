@@ -1,8 +1,8 @@
 "use client";
+import React from 'react';
 import { useState, useEffect } from 'react';
 import UserIcon from "@/assests/user_icon.png";
 import Image from "next/image";
-// import Documents from "@/assests/documents.jpg";
 import TargetForm from "../../targetForm";
 import TargetList from "../../targetList";
 import nookies from "nookies";
@@ -15,20 +15,16 @@ import Payslip from "../../../components/payslip";
 
 
 const Employee = ({ params }) => {
-    const { slug } = params;
+    const { slug } = React.use(params);
 
     const [userDetails, setUserDetails] = useState(null);
-    // const [error] = useState(null);
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState("");
-    // const [file, setFile] = useState(null);
-    // const [success] = useState("");
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState("");
 
-    // const [documents, setDocuments] = useState([]);
     const [newAnnouncement, setNewAnnouncement] = useState("");
-
+    const [announcements, setAnnouncements] = useState([]);
     const cookies = nookies.get();
     const role = cookies.role;
     useEffect(() => {
@@ -83,40 +79,6 @@ const Employee = ({ params }) => {
 
         fetchTasks();
     }, [slug]);
-
-
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     if (!file || !selectedUser) {
-    //         toast.error('Please select a user and upload a file');
-    //         return;
-    //     }
-
-    //     const formData = new FormData();
-    //     formData.append('file', file);
-    //     formData.append('userId', selectedUser);
-
-    //     try {
-    //         const res = await fetch('https://hrmsnode.onrender.com/api/upload', {
-    //             method: 'POST',
-    //             body: formData,
-    //         });
-
-    //         if (res.ok) {
-    //             toast.success('File uploaded successfully');
-    //             setFile(null);
-    //             setSelectedUser('');
-    //         } else {
-    //             toast.error('Failed to upload file');
-    //         }
-    //     } catch (err) {
-    //         console.log(err)
-    //         toast.error('An error occurred during the upload');
-    //     }
-    // };
-
     const handleAddTask = async (e) => {
         e.preventDefault();
         if (!newTask) {
@@ -175,11 +137,6 @@ const Employee = ({ params }) => {
         return new Intl.DateTimeFormat('en-GB', options).format(date);
     };
 
-    // const handleDownload = (fileName) => {
-    //     const downloadUrl = `https://hrmsnode.onrender.com/download/${fileName}`;
-    //     window.location.href = downloadUrl;
-    // };
-
     const handleAddAnnouncement = async (e) => {
         e.preventDefault();
 
@@ -207,13 +164,71 @@ const Employee = ({ params }) => {
                 toast.error(errorData.message || 'Failed to add announcement');
             }
         } catch (err) {
-            // Handle fetch errors or network issues
             console.log("err", err)
             toast.error('An error occurred while adding the announcement');
         }
     };
+    useEffect(() => {
+        const fetchAnnouncements = async () => {
+            try {
+                const res = await fetch('https://hrmsnode.onrender.com/api/announcements');
+                if (res.ok) {
+                    const data = await res.json();
+                    setAnnouncements(data); // Set fetched announcements to state
+                } else {
+                    toast.error('Failed to fetch announcements');
+                }
+            } catch (err) {
+                console.log(err);
+                toast.error('Error fetching announcements');
+            }
+        };
 
+        fetchAnnouncements();
+    }, []);
+    const handleDeleteAnnouncement = async (id) => {
+        try {
+            const res = await fetch(`https://hrmsnode.onrender.com/api/announcements/${id}`, {
+                method: 'DELETE',
+            });
 
+            if (res.ok) {
+                setAnnouncements(announcements.filter((announcement) => announcement._id !== id)); // Remove deleted announcement from the list
+                toast.success('Announcement deleted successfully');
+            } else {
+                const errorData = await res.json();
+                toast.error(errorData.message || 'Failed to delete announcement');
+            }
+        } catch (err) {
+            console.log('Error deleting announcement:', err);
+            toast.error('An error occurred while deleting the announcement');
+        }
+    };
+    const [leaveDataCount, setLeaveDataCount] = useState({ Casual: 0, Planned: 0, Sick: 0, WFH: 0 });
+
+  useEffect(() => {
+    const urlParts = window.location.pathname.split('/');
+    const userIdFromUrl = urlParts[urlParts.length - 1]; 
+
+        const FetchData = async (userIdFromUrl) => {
+            try {
+                const response = await fetch(`https://hrmsnode.onrender.com/api/leavecount/getbalance/${userIdFromUrl}`);
+                if (!response.ok) {
+                    throw new Error('Error fetching leaves');
+                }
+
+                const data = await response.json();
+
+                setLeaveDataCount(data.totalLeavesApplied);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                throw error;
+            }
+        };
+        if(userIdFromUrl){
+        FetchData(userIdFromUrl);
+        }
+    },[]);
     return (
         <>
             <ToastContainer position="top-right" autoClose={1000} hideProgressBar={false} closeOnClick pauseOnHover draggable />
@@ -231,13 +246,22 @@ const Employee = ({ params }) => {
                         <p className="my-2"><b>Joining Date: </b>
                             {formatDate(userDetails ? userDetails.joiningDate : '2024-12-31T00:00:00.000Z')}
                         </p>
-                        <p className="my-2"><b>Reporting Manager:</b> {userDetails ? userDetails.reportingManager : 'Test'}</p>
+                        
+                    <p className="my-2"><b>Reporting Manager:</b> {userDetails ? userDetails.reportingManager : 'Test'}</p>
+                    <p> Casual Consume: <b>{leaveDataCount.Casual}</b></p>
+                    <p>Planned Consume: <b>{leaveDataCount.Planned}</b>
+                    </p>
+                    <p>Sick Consume: <b>{leaveDataCount.Sick}</b>
+                    </p>
+                    <p>WFH Consume: <b>{leaveDataCount.WFH}</b>
+                    </p>
                     </span>
                 </div>
             </div>
             {role === 'Admin' &&
                 <div className="max-w-[90%] mx-auto rounded-md shadow-lg py-2 px-4 bg-white mt-4">
                     <div className='flex justify-between gap-[5%]'>
+                        <div className='w-1/2'>
                         <form onSubmit={handleAddAnnouncement} className='w-1/2'>
                             <div className='flex flex-col space-y-4'>
                                 <label htmlFor="announcement" className='font-bold text-sm'>Add Announcement</label>
@@ -250,7 +274,28 @@ const Employee = ({ params }) => {
                             </div>
                             <button type="submit" className='py-2 px-6 bg-blue-500 text-white rounded-md mt-4'>Add Announcement</button>
                         </form>
-
+                        <div className="mt-8">
+                <h2 className="text-xl font-semibold">Announcements</h2>
+                <ul className="space-y-4 mt-4">
+                    {announcements.length > 0 ? (
+                        announcements.map((announcement) => (
+                            <li key={announcement._id} className="flex items-center justify-between border-b py-2">
+                                <span>{announcement.announcement}</span>
+                                <button
+                                    onClick={() => handleDeleteAnnouncement(announcement._id)}
+                                    className="text-red-500 hover:text-red-700"
+                                    title="Delete"
+                                >
+                                    🗑️
+                                </button>
+                            </li>
+                        ))
+                    ) : (
+                        <p>No announcements available.</p>
+                    )}
+                </ul>
+            </div>
+            </div>
                         <form className="w-1/2" onSubmit={handleAddTask}>
                             <div className='flex items-start gap-2'>
                                 <div className='w-1/2'>
