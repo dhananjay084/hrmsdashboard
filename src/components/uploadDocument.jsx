@@ -10,16 +10,13 @@ const Documents = () => {
   const [userId, setUserId] = useState('');
 
   useEffect(() => {
-    // Get the userId from cookies using nookies
-    const cookies = parseCookies();
-    const userIdFromCookie = cookies.id; // Assuming userId is stored in cookies as 'id'
+    // Extract userId from URL path (e.g., /employee/678501c6a59c85da207e3544)
+    const urlParts = window.location.pathname.split('/');
+    const userIdFromUrl = urlParts[urlParts.length - 1]; // Assuming userId is the last part of the URL
 
-    if (userIdFromCookie) {
-      setUserId(userIdFromCookie); // Set the userId from cookies into state
-    }
-
-    if (userIdFromCookie) {
-      fetchDocuments(userIdFromCookie); // Fetch documents for this user
+    if (userIdFromUrl) {
+      setUserId(userIdFromUrl); // Set the userId from URL into state
+      fetchDocuments(userIdFromUrl); // Fetch documents for this user
     }
   }, []);
 
@@ -28,8 +25,8 @@ const Documents = () => {
       const response = await axios.get(`https://hrmsnode.onrender.com/api/documents?userId=${userId}`);
       setDocuments(response.data);
     } catch (error) {
-    //    toast.error('Error fetching documents'); // Toastify error message
       console.error('Error fetching documents:', error);
+      toast.error('Error fetching documents'); // Toastify error message
     }
   };
 
@@ -41,15 +38,19 @@ const Documents = () => {
     if (!file || !userId) return;
 
     const formData = new FormData();
+    const cookies = parseCookies();
+    const userIdFromCookie = cookies.id; 
     formData.append('document', file);
-    formData.append('userId', userId); // Send the userId from the cookie
+    if (userIdFromCookie) {
+    formData.append('userId', userIdFromCookie);
+    } 
 
     try {
       await axios.post('https://hrmsnode.onrender.com/api/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setFile(null);
-      fetchDocuments(userId); // Re-fetch the documents after upload
+      fetchDocuments(userId); // Re-fetch documents after upload
       toast.success('Document uploaded successfully'); // Toastify success message
     } catch (error) {
       toast.error('Error uploading document'); // Toastify error message
@@ -79,7 +80,7 @@ const Documents = () => {
 
       <div className="space-y-4 mb-6">
         <div className='hidden'>
-          <label className="block text-gray-700">User ID (Pre-filled from Cookies):</label>
+          <label className="block text-gray-700">User ID (Pre-filled from URL):</label>
           <input
             type="text"
             value={userId}
