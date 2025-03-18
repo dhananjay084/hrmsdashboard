@@ -174,7 +174,7 @@ const Employee = ({ params }) => {
                 const res = await fetch('https://hrmsnode.onrender.com/api/announcements');
                 if (res.ok) {
                     const data = await res.json();
-                    setAnnouncements(data); // Set fetched announcements to state
+                    setAnnouncements(data); 
                 } else {
                     toast.error('Failed to fetch announcements');
                 }
@@ -183,7 +183,7 @@ const Employee = ({ params }) => {
                 toast.error('Error fetching announcements');
             }
         };
-
+          
         fetchAnnouncements();
     }, []);
     const handleDeleteAnnouncement = async (id) => {
