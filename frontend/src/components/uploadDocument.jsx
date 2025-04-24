@@ -95,7 +95,7 @@ const Documents = () => {
   const handleUserChange = (e) => {
     setSelectedUserId(e.target.value);
   };
-
+console.log(role);
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Upload & View Documents</h1>
@@ -115,7 +115,7 @@ const Documents = () => {
         )}
 
         {/* Dropdown for Admin to select a user */}
-        {role === 'Admin' && (
+        {/* {role === 'Admin' && ( */}
           <select
             id="user"
             name="userId"
@@ -131,7 +131,7 @@ const Documents = () => {
               </option>
             ))}
           </select>
-        )}
+        {/* )} */}
 
         <div>
           <label className="block text-gray-700">Upload Document:</label>
