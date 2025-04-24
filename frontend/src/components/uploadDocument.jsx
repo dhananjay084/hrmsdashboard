@@ -115,7 +115,7 @@ console.log(role);
         )}
 
         {/* Dropdown for Admin to select a user */}
-        {/* {role === 'Admin' && ( */}
+        {role === 'Admin' && (
           <select
             id="user"
             name="userId"
@@ -131,7 +131,7 @@ console.log(role);
               </option>
             ))}
           </select>
-        {/* )} */}
+        )}
 
         <div>
           <label className="block text-gray-700">Upload Document:</label>
