@@ -62,7 +62,7 @@ const Documents = () => {
     const formData = new FormData();
     formData.append('document', file);
     formData.append('userId', userIdForUpload); // Use the appropriate userId for upload
-
+    console.log(formData)
     try {
       await axios.post('https://hrmsnode.onrender.com/api/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
