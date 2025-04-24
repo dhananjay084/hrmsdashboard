@@ -3,7 +3,7 @@ import axios from 'axios';
 import { parseCookies } from 'nookies';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import nookies from "nookies";
 const Documents = () => {
   const [documents, setDocuments] = useState([]);
   const [file, setFile] = useState(null);
@@ -11,8 +11,9 @@ const Documents = () => {
   const [users, setUsers] = useState([]);
   const [role, setRole] = useState('');
   const [selectedUserId, setSelectedUserId] = useState('');
-  const cookies = parseCookies();
-  
+  // const cookies = parseCookies();
+  // const role = cookies.role;
+  const cookies = nookies.get();
   useEffect(() => {
     // Extract userId from URL path (e.g., /employee/678501c6a59c85da207e3544)
     const urlParts = window.location.pathname.split('/');
